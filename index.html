@@ -50,7 +50,7 @@
           </ul>
         </nav>
 
-        <a href="#bouquets" class="primary-button header-button"
+        <a href="#" class="primary-button header-button" data-modal-open
           >Explore Bouquets</a
         >
 
@@ -134,85 +134,8 @@
         <div class="container">
           <h2 class="section-title">Top-Selling Bouquets</h2>
           <div class="bestsellers-slider-wrapper">
-            <ul class="bestsellers-list">
-              <li class="bestsellers-item">
-                <picture>
-                  <source
-                    type="image/webp"
-                    srcset="
-                      ./images/top-bouquet-1-1x.webp 1x,
-                      ./images/top-bouquet-1-2x.webp 2x
-                    "
-                  />
-                  <img
-                    loading="lazy"
-                    src="./images/top-bouquet-1-1x.jpg"
-                    srcset="./images/top-bouquet-1-2x.jpg 2x"
-                    alt="Spring Elegance"
-                    class="bestsellers-img"
-                    width="400"
-                    height="320"
-                  />
-                </picture>
-                <h3 class="bestsellers-item-title">Spring Elegance</h3>
-                <p class="text bestsellers-item-text">
-                  A delicate blend of peonies, tulips, and roses — perfect for
-                  springtime gifting and bright smiles.
-                </p>
-                <p class="bestsellers-item-price">$35</p>
-              </li>
-              <li class="bestsellers-item">
-                <picture>
-                  <source
-                    type="image/webp"
-                    srcset="
-                      ./images/top-bouquet-2-1x.webp 1x,
-                      ./images/top-bouquet-2-2x.webp 2x
-                    "
-                  />
-                  <img
-                    loading="lazy"
-                    src="./images/top-bouquet-2-1x.jpg"
-                    srcset="./images/top-bouquet-2-2x.jpg 2x"
-                    alt="Crimson Rose"
-                    class="bestsellers-img"
-                    width="400"
-                    height="320"
-                  />
-                </picture>
-                <h3 class="bestsellers-item-title">Crimson Rose</h3>
-                <p class="text bestsellers-item-text">
-                  A stylish composition of roses, seasonal greenery, and vibrant
-                  berries — a bold and elegant floral statement.
-                </p>
-                <p class="bestsellers-item-price">$55</p>
-              </li>
-              <li class="bestsellers-item">
-                <picture>
-                  <source
-                    type="image/webp"
-                    srcset="
-                      ./images/top-bouquet-3-1x.webp 1x,
-                      ./images/top-bouquet-3-2x.webp 2x
-                    "
-                  />
-                  <img
-                    loading="lazy"
-                    src="./images/top-bouquet-3-1x.jpg"
-                    srcset="./images/top-bouquet-3-2x.jpg 2x"
-                    alt="Sunny Bliss"
-                    class="bestsellers-img"
-                    width="400"
-                    height="320"
-                  />
-                </picture>
-                <h3 class="bestsellers-item-title">Sunny Bliss</h3>
-                <p class="text bestsellers-item-text">
-                  A rich bouquet with lavender, lisianthus, and roses — ideal
-                  for those who love deep hues and gentle fragrance.
-                </p>
-                <p class="bestsellers-item-price">$40</p>
-              </li>
+            <ul class="bestsellers-list" id="bestsellers-list">
+              <!-- dynamically rendered -->
             </ul>
             <div class="bestsellers-pagination">
               <ul class="pagination-dots">
@@ -254,209 +177,14 @@
           <p class="title-text">
             Explore our stunning selection of fresh flower bouquets.
           </p>
-          <ul class="catalogue-list bouquets">
-            <li>
-              <picture>
-                <source
-                  type="image/webp"
-                  srcset="
-                    ./images/bouquet-1-1x.webp 1x,
-                    ./images/bouquet-1-2x.webp 2x
-                  "
-                />
-                <img
-                  loading="lazy"
-                  src="./images/bouquet-1-1x.jpg"
-                  srcset="./images/bouquet-1-2x.jpg 2x"
-                  alt="Bouquet 1"
-                  width="250"
-                  class="catalogue-img"
-                />
-              </picture>
-              <h3 class="catalogue-item-title">Peach Meadow</h3>
-              <p class="text bestsellers-item-text">
-                A soft and radiant arrangement of peach and blush roses with
-                lush greenery in a straw basket — light and natural.
-              </p>
-              <p class="catalogue-item-price">$55</p>
-            </li>
-            <li>
-              <picture>
-                <source
-                  type="image/webp"
-                  srcset="
-                    ./images/bouquet-2-1x.webp 1x,
-                    ./images/bouquet-2-2x.webp 2x
-                  "
-                />
-                <img
-                  loading="lazy"
-                  src="./images/bouquet-2-1x.jpg"
-                  srcset="./images/bouquet-2-2x.jpg 2x"
-                  alt="Bouquet 2"
-                  width="250"
-                  class="catalogue-img"
-                />
-              </picture>
-              <h3 class="catalogue-item-title">Blush Romance</h3>
-              <p class="text bestsellers-item-text">
-                A premium bouquet of deep pink and ivory roses, complemented by
-                silver eucalyptus — sophisticated and intimate.
-              </p>
-              <p class="catalogue-item-price">$34</p>
-            </li>
-            <li>
-              <picture>
-                <source
-                  type="image/webp"
-                  srcset="
-                    ./images/bouquet-3-1x.webp 1x,
-                    ./images/bouquet-3-2x.webp 2x
-                  "
-                />
-                <img
-                  loading="lazy"
-                  src="./images/bouquet-3-1x.jpg"
-                  srcset="./images/bouquet-3-2x.jpg 2x"
-                  alt="Bouquet 3"
-                  width="250"
-                  class="catalogue-img"
-                />
-              </picture>
-              <h3 class="catalogue-item-title">Pastel Garden</h3>
-              <p class="text bestsellers-item-text">
-                A pastel-toned mix of spray roses and greenery in a woven basket
-                — gentle, airy, and perfect for any occasion.
-              </p>
-              <p class="catalogue-item-price">$40</p>
-            </li>
-            <li>
-              <picture>
-                <source
-                  type="image/webp"
-                  srcset="
-                    ./images/bouquet-4-1x.webp 1x,
-                    ./images/bouquet-4-2x.webp 2x
-                  "
-                />
-                <img
-                  loading="lazy"
-                  src="./images/bouquet-4-1x.jpg"
-                  srcset="./images/bouquet-4-2x.jpg 2x"
-                  alt="Bouquet 4"
-                  width="250"
-                  class="catalogue-img"
-                />
-              </picture>
-              <h3 class="catalogue-item-title">Tulip Charm</h3>
-              <p class="text bestsellers-item-text">
-                A vivid bouquet of bright tulips and roses in a lavender box —
-                cheerful and full of charm.
-              </p>
-              <p class="catalogue-item-price">$61</p>
-            </li>
-            <li>
-              <picture>
-                <source
-                  type="image/webp"
-                  srcset="
-                    ./images/bouquet-5-1x.webp 1x,
-                    ./images/bouquet-5-2x.webp 2x
-                  "
-                />
-                <img
-                  loading="lazy"
-                  src="./images/bouquet-5-1x.jpg"
-                  srcset="./images/bouquet-5-2x.jpg 2x"
-                  alt="Bouquet 5"
-                  width="250"
-                  class="catalogue-img"
-                />
-              </picture>
-              <h3 class="catalogue-item-title">Berry Bloom</h3>
-              <p class="text bestsellers-item-text">
-                A lush mix of rich pink, purple, and cream blooms with textured
-                greens — romantic and elegant.
-              </p>
-              <p class="catalogue-item-price">$32</p>
-            </li>
-            <li>
-              <picture>
-                <source
-                  type="image/webp"
-                  srcset="
-                    ./images/bouquet-6-1x.webp 1x,
-                    ./images/bouquet-6-2x.webp 2x
-                  "
-                />
-                <img
-                  loading="lazy"
-                  src="./images/bouquet-6-1x.jpg"
-                  srcset="./images/bouquet-6-2x.jpg 2x"
-                  alt="Bouquet 6"
-                  width="250"
-                  class="catalogue-img"
-                />
-              </picture>
-              <h3 class="catalogue-item-title">Sweet Whisper</h3>
-              <p class="text bestsellers-item-text">
-                A charming spring bouquet with peonies, roses, and lilac-toned
-                accents — fresh, lively, and expressive.
-              </p>
-              <p class="catalogue-item-price">$40</p>
-            </li>
-            <li>
-              <picture>
-                <source
-                  type="image/webp"
-                  srcset="
-                    ./images/bouquet-7-1x.webp 1x,
-                    ./images/bouquet-7-2x.webp 2x
-                  "
-                />
-                <img
-                  loading="lazy"
-                  src="./images/bouquet-7-1x.jpg"
-                  srcset="./images/bouquet-7-2x.jpg 2x"
-                  alt="Bouquet 7"
-                  width="250"
-                  class="catalogue-img"
-                />
-              </picture>
-              <h3 class="catalogue-item-title">Field Joy</h3>
-              <p class="text bestsellers-item-text">
-                A rustic hand-tied bouquet of sunflowers, lisianthus, and
-                daisies — perfect for brightening the day.
-              </p>
-              <p class="catalogue-item-price">$49</p>
-            </li>
-            <li>
-              <picture>
-                <source
-                  type="image/webp"
-                  srcset="
-                    ./images/bouquet-8-1x.webp 1x,
-                    ./images/bouquet-8-2x.webp 2x
-                  "
-                />
-                <img
-                  loading="lazy"
-                  src="./images/bouquet-8-1x.jpg"
-                  srcset="./images/bouquet-8-2x.jpg 2x"
-                  alt="Bouquet 8"
-                  width="250"
-                  class="catalogue-img"
-                />
-              </picture>
-              <h3 class="catalogue-item-title">Soft Bloom</h3>
-              <p class="text bestsellers-item-text">
-                A delicate bouquet of pink carnations and roses wrapped in satin
-                paper — soft, stylish, and versatile.
-              </p>
-              <p class="catalogue-item-price">$37</p>
-            </li>
+          <div class="catalogue-filter">
+            <label for="search-input" class="visually-hidden">Search bouquets</label>
+            <input type="text" id="search-input" class="search-input" name="search" placeholder="Search bouquets...">
+          </div>
+          <ul class="catalogue-list bouquets" id="bouquets-list">
+            <!-- dynamically rendered -->
           </ul>
-          <button type="button" class="primary-button">Show More</button>
+          <button type="button" class="primary-button" id="load-more-btn">Show More</button>
         </div>
       </section>
 
@@ -484,6 +212,24 @@
                   The service was exceptional, and the flowers were fresh!
                 </p>
                 <p class="feedback-person">Olivia M.</p>
+              </li>
+              <li class="feedbacks-item">
+                <p class="text">
+                  Ordered a last-minute gift and was amazed by how fast and professional the delivery was. Highly recommend!
+                </p>
+                <p class="feedback-person">Julia K.</p>
+              </li>
+              <li class="feedbacks-item">
+                <p class="text">
+                  Every flower was perfect. You can feel the care and love in every bouquet.
+                </p>
+                <p class="feedback-person">Mark S.</p>
+              </li>
+              <li class="feedbacks-item">
+                <p class="text">
+                  Flora helped make my friend's birthday extra special. She was blown away by the flowers!
+                </p>
+                <p class="feedback-person">Natalie V.</p>
               </li>
             </ul>
             <div class="feedback-pagination-buttons">
@@ -622,8 +368,16 @@
             ></a>
           </li>
         </ul>
+        <form class="footer-subscription-form">
+          <p class="footer-subscription-title">Subscribe to our newsletter</p>
+          <div class="footer-form-wrapper">
+            <label for="subscribe-email" class="visually-hidden">E-mail</label>
+            <input type="email" name="subscribe-email" id="subscribe-email" class="footer-form-input" placeholder="E-mail" required />
+            <button type="submit" class="primary-button footer-submit-button">Subscribe</button>
+          </div>
+        </form>
         <hr class="footer-divider" />
-        <p class="footer-copyright">&copy; 2026 Flora. All rights reserved.</p>
+        <p class="footer-copyright">&copy; 2025 Flora. All rights reserved.</p>
       </div>
     </footer>
 
@@ -647,14 +401,65 @@
           <li><a href="#feedback" class="general-link">Feedback</a></li>
           <li><a href="#contacts" class="general-link">Contacts</a></li>
         </ul>
-        <a href="#bouquets" class="primary-button menu-action-button"
+        <a href="#" class="primary-button menu-action-button" data-modal-open
           >Explore Bouquets</a
         >
       </div>
     </div>
 
+
+    <div class="backdrop" data-modal>
+      <div class="modal">
+        <button type="button" class="modal-close-btn" data-modal-close aria-label="Close modal">
+          <svg class="modal-close-icon" width="24" height="24">
+            <use href="./images/icons.svg#close_x"></use>
+          </svg>
+        </button>
+        <p class="modal-title">Leave your contacts and we will call you back</p>
+        <form class="modal-form">
+          <div class="modal-field">
+            <label for="user-name" class="modal-label">Name</label>
+            <div class="input-wrapper">
+              <input type="text" id="user-name" name="user-name" class="modal-input" required />
+            </div>
+          </div>
+          <div class="modal-field">
+            <label for="user-phone" class="modal-label">Phone</label>
+            <div class="input-wrapper">
+              <input type="tel" id="user-phone" name="user-phone" class="modal-input" required />
+            </div>
+          </div>
+          <div class="modal-field">
+            <label for="user-email" class="modal-label">Email</label>
+            <div class="input-wrapper">
+              <input type="email" id="user-email" name="user-email" class="modal-input" required />
+            </div>
+          </div>
+          <div class="modal-field">
+            <label for="user-comment" class="modal-label">Comment</label>
+            <textarea id="user-comment" name="user-comment" class="modal-textarea" placeholder="Text input"></textarea>
+          </div>
+          <div class="modal-checkbox-wrapper">
+            <input type="checkbox" id="user-privacy" name="user-privacy" class="modal-checkbox visually-hidden" required value="true" />
+            <label for="user-privacy" class="modal-checkbox-label">
+              <span class="custom-checkbox">
+                <svg class="custom-checkbox-icon" width="10" height="8">
+                  <use href="./images/icons.svg#check"></use>
+                </svg>
+              </span>
+              I accept the terms and conditions of the&nbsp;<a href="#" class="privacy-link">Privacy Policy</a>
+            </label>
+          </div>
+          <button type="submit" class="primary-button modal-submit-btn">Send</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./js/slider.js"></script>
     <script src="./js/menu.js"></script>
     <script src="./js/scroll-top.js"></script>
+    <script src="./js/api.js"></script>
+
   </body>
 </html>
