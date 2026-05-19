@@ -1,4 +1,6 @@
-const BASE_URL = 'http://localhost:3000';
+const LOCAL_URL = 'http://localhost:3000';
+const REMOTE_URL = 'https://my-json-server.typicode.com/vsoroka-hash/MT-markup-practice_P1-Soroka_Volodymyr';
+let BASE_URL = LOCAL_URL;
 
 // Application state
 const state = {
@@ -226,4 +228,15 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ==================== Init ====================
-document.addEventListener('DOMContentLoaded', loadInitialData);
+async function init() {
+  // Try local json-server first; if unavailable, switch to remote mock API
+  try {
+    await axios.get(`${LOCAL_URL}/bestsellers`);
+    BASE_URL = LOCAL_URL;
+  } catch {
+    BASE_URL = REMOTE_URL;
+  }
+  await loadInitialData();
+}
+
+document.addEventListener('DOMContentLoaded', init);
