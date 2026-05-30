@@ -184,7 +184,10 @@
           <ul class="catalogue-list bouquets" id="bouquets-list">
             <!-- dynamically rendered -->
           </ul>
-          <button type="button" class="primary-button" id="load-more-btn">Show More</button>
+          <div id="catalogue-loader" class="catalogue-loader" style="display:none;">
+            <span class="loader-spinner"></span>
+          </div>
+          <button type="button" class="primary-button" id="load-more-btn" style="display:none;">Show More</button>
         </div>
       </section>
 
@@ -408,6 +411,7 @@
     </div>
 
 
+    <!-- Contact Form Modal -->
     <div class="backdrop" data-modal>
       <div class="modal">
         <button type="button" class="modal-close-btn" data-modal-close aria-label="Close modal">
@@ -452,6 +456,37 @@
           </div>
           <button type="submit" class="primary-button modal-submit-btn">Send</button>
         </form>
+      </div>
+    </div>
+
+    <!-- Product Details Modal -->
+    <div class="backdrop product-backdrop" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="product-modal-title">
+      <div class="product-modal">
+        <button type="button" class="product-modal-close-btn" id="product-modal-close" aria-label="Close product details">
+          <svg class="modal-close-icon" width="24" height="24">
+            <use href="./images/icons.svg#close_x"></use>
+          </svg>
+        </button>
+        <div class="product-modal-content">
+          <div class="product-modal-img-wrap">
+            <picture id="product-modal-picture">
+              <source id="product-modal-source" type="image/webp" srcset="" />
+              <img id="product-modal-img" src="" alt="" class="product-modal-img" width="536" height="571" />
+            </picture>
+          </div>
+          <div class="product-modal-info">
+            <h2 class="product-modal-title" id="product-modal-title"></h2>
+            <p class="product-modal-price"><span id="product-modal-price-value"></span></p>
+            <p class="product-modal-description" id="product-modal-description"></p>
+            <div class="product-modal-actions">
+              <button type="button" class="primary-button product-modal-buy-btn">Buy now</button>
+              <div class="product-modal-qty">
+                <label for="product-qty" class="visually-hidden">Quantity</label>
+                <input type="number" id="product-qty" class="product-modal-qty-input" value="1" min="1" max="99" />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 

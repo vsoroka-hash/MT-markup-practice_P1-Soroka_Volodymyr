@@ -1,4 +1,5 @@
-const setupSlider = (
+// Make setupSlider globally accessible for api.js to call after dynamic render
+window.setupSlider = (
   wrapperSelector,
   listSelector,
   prevSelector,
@@ -98,18 +99,14 @@ const setupSlider = (
   updateButtons();
 };
 
+// Feedback slider initialised immediately (static HTML)
 setupSlider(
-  ".bestsellers-slider-wrapper",
-  ".bestsellers-list",
-  ".bestsellers-prev-btn",
-  ".bestsellers-next-btn",
-  ".pagination-dots",
+  '.feedback-slider-wrapper',
+  '.feedbacks-list',
+  '.feedback-prev-btn',
+  '.feedback-next-btn',
+  '.pagination-dots',
 );
 
-setupSlider(
-  ".feedback-slider-wrapper",
-  ".feedbacks-list",
-  ".feedback-prev-btn",
-  ".feedback-next-btn",
-  ".pagination-dots",
-);
+// NOTE: Bestsellers slider is initialised in api.js after data is loaded
+

@@ -19,7 +19,26 @@ const refs = {
   closeModalBtn: document.querySelector('[data-modal-close]'),
   modalForm: document.querySelector('.modal-form'),
   footerForm: document.querySelector('.footer-subscription-form'),
+  loader: document.getElementById('catalogue-loader'),
+  // Product Details modal
+  productModal: document.getElementById('product-modal'),
+  productModalClose: document.getElementById('product-modal-close'),
+  productModalImg: document.getElementById('product-modal-img'),
+  productModalSource: document.getElementById('product-modal-source'),
+  productModalTitle: document.getElementById('product-modal-title'),
+  productModalPrice: document.getElementById('product-modal-price-value'),
+  productModalDesc: document.getElementById('product-modal-description'),
 };
+
+// ==================== Loader ====================
+
+function showLoader() {
+  if (refs.loader) refs.loader.style.display = 'flex';
+}
+
+function hideLoader() {
+  if (refs.loader) refs.loader.style.display = 'none';
+}
 
 // ==================== API requests ====================
 
@@ -43,10 +62,12 @@ async function fetchBouquets(page, limit, query = '') {
       params.q = query;
     }
     const response = await axios.get(`${BASE_URL}/bouquets`, { params });
-    return response.data;
+    // json-server returns total item count in X-Total-Count header
+    const total = parseInt(response.headers['x-total-count'] ?? response.data.length, 10);
+    return { data: response.data, total };
   } catch (error) {
     console.error('Error fetching bouquets:', error);
-    return [];
+    return { data: [], total: 0 };
   }
 }
 
@@ -91,7 +112,7 @@ function renderBouquets(items) {
   const markup = items
     .map(
       item => `
-      <li>
+      <li class="catalogue-card" style="cursor:pointer;" data-id="${item.id}">
         <picture>
           <source
             type="image/webp"
@@ -117,6 +138,16 @@ function renderBouquets(items) {
     )
     .join('');
   refs.bouquetsList.insertAdjacentHTML('beforeend', markup);
+  // Attach product modal open listeners to newly rendered cards
+  refs.bouquetsList.querySelectorAll('.catalogue-card:not([data-bound])').forEach(card => {
+    card.setAttribute('data-bound', 'true');
+    // Find the corresponding item by matching data-id
+    const cardId = parseInt(card.getAttribute('data-id'));
+    const item = items.find(i => i.id === cardId);
+    if (item) {
+      card.addEventListener('click', () => openProductModal(item));
+    }
+  });
 }
 
 // ==================== Data loading ====================
@@ -124,23 +155,49 @@ function renderBouquets(items) {
 async function loadInitialData() {
   const bestsellers = await fetchBestsellers();
   renderBestsellers(bestsellers);
+  // Re-init bestsellers slider after dynamic render (setupSlider is window.setupSlider from slider.js)
+  if (typeof setupSlider === 'function') {
+    setupSlider(
+      '.bestsellers-slider-wrapper',
+      '.bestsellers-list',
+      '.bestsellers-prev-btn',
+      '.bestsellers-next-btn',
+      '.pagination-dots',
+    );
+  }
+  // Attach product detail modal on bestseller cards
+  if (refs.bestsellersList) {
+    refs.bestsellersList.querySelectorAll('.bestsellers-item').forEach((card, index) => {
+      card.style.cursor = 'pointer';
+      const item = bestsellers[index];
+      if (item) {
+        card.addEventListener('click', () => openProductModal(item));
+      }
+    });
+  }
 
   await loadBouquets();
 }
 
 async function loadBouquets() {
-  const bouquets = await fetchBouquets(state.currentPage, state.limit, state.currentQuery);
-  renderBouquets(bouquets);
+  showLoader();
+  const { data: bouquets, total } = await fetchBouquets(state.currentPage, state.limit, state.currentQuery);
+  hideLoader();
 
-  // Handle empty state
+  // Handle empty state on first page — no results at all
   if (state.currentPage === 1 && bouquets.length === 0) {
     refs.bouquetsList.innerHTML = '<p class="text" style="text-align: center;">No bouquets found.</p>';
     refs.loadMoreBtn.style.display = 'none';
     return;
   }
 
-  // Hide "Show More" if fewer items returned than limit (end of collection)
-  if (bouquets.length < state.limit) {
+  renderBouquets(bouquets);
+
+  // How many items have been loaded in total so far
+  const loadedSoFar = (state.currentPage - 1) * state.limit + bouquets.length;
+
+  // Hide button immediately if we have loaded everything
+  if (loadedSoFar >= total || bouquets.length < state.limit) {
     refs.loadMoreBtn.style.display = 'none';
   } else {
     refs.loadMoreBtn.style.display = 'inline-flex';
@@ -157,13 +214,18 @@ if (refs.loadMoreBtn) {
   });
 }
 
-// Filtering — Search input
+// Filtering — Search input (debounced)
+let searchDebounceTimer = null;
 if (refs.searchInput) {
-  refs.searchInput.addEventListener('input', async (e) => {
-    state.currentQuery = e.target.value.trim();
-    state.currentPage = 1;
-    refs.bouquetsList.innerHTML = '';
-    await loadBouquets();
+  refs.searchInput.addEventListener('input', (e) => {
+    clearTimeout(searchDebounceTimer);
+    searchDebounceTimer = setTimeout(async () => {
+      state.currentQuery = e.target.value.trim();
+      state.currentPage = 1;
+      refs.bouquetsList.innerHTML = '';
+      refs.loadMoreBtn.style.display = 'none';
+      await loadBouquets();
+    }, 300);
   });
 }
 
@@ -186,7 +248,7 @@ if (refs.footerForm) {
   });
 }
 
-// ==================== Modal logic ====================
+// ==================== Contact Form Modal logic ====================
 
 function openModal() {
   refs.backdrop.classList.add('is-open');
@@ -198,7 +260,7 @@ function closeModal() {
   document.body.classList.remove('no-scroll');
 }
 
-// Open modal buttons
+// Open contact modal buttons (header/mobile menu)
 refs.openModalBtns.forEach(btn => {
   btn.addEventListener('click', (e) => {
     e.preventDefault();
@@ -220,10 +282,53 @@ if (refs.backdrop) {
   });
 }
 
-// Close by Escape key
+// ==================== Product Details Modal logic ====================
+
+function openProductModal(item) {
+  // Populate content
+  refs.productModalTitle.textContent = item.title;
+  refs.productModalPrice.textContent = `$${item.price}`;
+  refs.productModalDesc.textContent = item.description;
+
+  const base = `./images/${item.imageBase}`;
+  refs.productModalSource.srcset = `${base}-1x.webp 1x, ${base}-2x.webp 2x`;
+  refs.productModalImg.src = `${base}-1x.jpg`;
+  refs.productModalImg.srcset = `${base}-2x.jpg 2x`;
+  refs.productModalImg.alt = item.title;
+
+  // Reset quantity
+  const qtyInput = document.getElementById('product-qty');
+  if (qtyInput) qtyInput.value = 1;
+
+  refs.productModal.classList.add('is-open');
+  document.body.classList.add('no-scroll');
+  refs.productModalClose.focus();
+}
+
+function closeProductModal() {
+  refs.productModal.classList.remove('is-open');
+  document.body.classList.remove('no-scroll');
+}
+
+// Close product modal by X button
+if (refs.productModalClose) {
+  refs.productModalClose.addEventListener('click', closeProductModal);
+}
+
+// Close product modal by backdrop click
+if (refs.productModal) {
+  refs.productModal.addEventListener('click', (e) => {
+    if (e.target === refs.productModal) {
+      closeProductModal();
+    }
+  });
+}
+
+// Close by Escape key (either modal)
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && refs.backdrop.classList.contains('is-open')) {
-    closeModal();
+  if (e.key === 'Escape') {
+    if (refs.backdrop.classList.contains('is-open')) closeModal();
+    if (refs.productModal && refs.productModal.classList.contains('is-open')) closeProductModal();
   }
 });
 
