@@ -490,6 +490,43 @@
       </div>
     </div>
 
+    <!-- Order Modal -->
+    <div class="backdrop order-backdrop" id="order-modal" role="dialog" aria-modal="true" aria-labelledby="order-modal-title">
+      <div class="modal order-modal">
+        <button type="button" class="modal-close-btn" id="order-modal-close" aria-label="Close order modal">
+          <svg class="modal-close-icon" width="24" height="24">
+            <use href="./images/icons.svg#close_x"></use>
+          </svg>
+        </button>
+        <p class="modal-title order-modal-title" id="order-modal-title">Order</p>
+        <form class="modal-form" id="order-form">
+          <div class="modal-field">
+            <label for="order-name" class="modal-label">Name*</label>
+            <div class="input-wrapper">
+              <input type="text" id="order-name" name="order-name" class="modal-input" placeholder="Ann" required />
+            </div>
+          </div>
+          <div class="modal-field">
+            <label for="order-phone" class="modal-label">Phone*</label>
+            <div class="input-wrapper">
+              <input type="tel" id="order-phone" name="order-phone" class="modal-input" placeholder="+1 (555) 123-4567" required />
+            </div>
+          </div>
+          <div class="modal-field">
+            <label for="order-address" class="modal-label">Address</label>
+            <div class="input-wrapper">
+              <input type="text" id="order-address" name="order-address" class="modal-input" placeholder="456 Floral Ave, Sydney NSW 2000 AU" />
+            </div>
+          </div>
+          <div class="modal-field">
+            <label for="order-comment" class="modal-label">Message</label>
+            <textarea id="order-comment" name="order-comment" class="modal-textarea order-modal-textarea" placeholder="Type your message..."></textarea>
+          </div>
+          <button type="submit" class="primary-button modal-submit-btn order-modal-submit-btn">Go to Checkout</button>
+        </form>
+      </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./js/slider.js"></script>
     <script src="./js/menu.js"></script>

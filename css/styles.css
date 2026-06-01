@@ -438,20 +438,20 @@ body {
   height: 48px;
   border-radius: 50%;
   background-color: transparent;
-  border: 1px solid #d9d9d9;
+  border: 1px solid var(--primary-text);
   cursor: pointer;
   color: var(--primary-text);
   transition:
     border-color 250ms cubic-bezier(0.4, 0, 0.2, 1),
     background 250ms cubic-bezier(0.4, 0, 0.2, 1),
     background-color 250ms cubic-bezier(0.4, 0, 0.2, 1),
-    color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    color 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
   padding: 0;
 }
 
 .slider-btn:disabled {
-  border-color: #f0f0f0;
-  color: #d3d3d3;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
@@ -1460,9 +1460,45 @@ body {
     opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.product-backdrop.is-open .product-modal {
+.product-backdrop.is-open .product-modal,
+.order-backdrop.is-open .order-modal {
   transform: scale(1);
   opacity: 1;
+}
+
+/* ==================== Order Modal ==================== */
+.order-backdrop {
+  z-index: 120;
+}
+
+.order-modal {
+  padding: 56px 20px;
+  max-width: 335px;
+}
+
+.order-modal-title {
+  margin-bottom: 24px;
+}
+
+.order-modal-textarea {
+  height: 120px;
+}
+
+@media screen and (min-width: 768px) {
+  .order-modal {
+    max-width: 704px;
+    padding: 32px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .order-modal {
+    max-width: 842px;
+    padding: 64px;
+  }
+  .order-modal-textarea {
+    height: 180px;
+  }
 }
 
 .product-modal-close-btn {
@@ -1532,10 +1568,9 @@ body {
   font-size: 20px;
   font-weight: 400;
   color: var(--primary-text);
-  border: 1px solid rgba(3, 12, 1, 0.2);
+  border-right: 1px solid rgba(3, 12, 1, 1);
   display: inline-block;
-  padding: 2px 10px;
-  border-radius: 6px;
+  padding: 2px 16px 2px 0;
   margin: 0;
   align-self: flex-start;
 }

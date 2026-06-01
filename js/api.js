@@ -28,6 +28,11 @@ const refs = {
   productModalTitle: document.getElementById('product-modal-title'),
   productModalPrice: document.getElementById('product-modal-price-value'),
   productModalDesc: document.getElementById('product-modal-description'),
+  productModalBuyBtn: document.querySelector('.product-modal-buy-btn'),
+  // Order Modal
+  orderModal: document.getElementById('order-modal'),
+  orderModalClose: document.getElementById('order-modal-close'),
+  orderForm: document.getElementById('order-form'),
 };
 
 // ==================== Loader ====================
@@ -329,8 +334,52 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     if (refs.backdrop.classList.contains('is-open')) closeModal();
     if (refs.productModal && refs.productModal.classList.contains('is-open')) closeProductModal();
+    if (refs.orderModal && refs.orderModal.classList.contains('is-open')) closeOrderModal();
   }
 });
+
+// ==================== Order Modal logic ====================
+
+function openOrderModal() {
+  refs.orderModal.classList.add('is-open');
+  document.body.classList.add('no-scroll');
+}
+
+function closeOrderModal() {
+  refs.orderModal.classList.remove('is-open');
+  if (!refs.productModal.classList.contains('is-open') && !refs.backdrop.classList.contains('is-open')) {
+    document.body.classList.remove('no-scroll');
+  }
+}
+
+if (refs.productModalBuyBtn) {
+  refs.productModalBuyBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    closeProductModal();
+    openOrderModal();
+  });
+}
+
+if (refs.orderModalClose) {
+  refs.orderModalClose.addEventListener('click', closeOrderModal);
+}
+
+if (refs.orderModal) {
+  refs.orderModal.addEventListener('click', (e) => {
+    if (e.target === refs.orderModal) {
+      closeOrderModal();
+    }
+  });
+}
+
+if (refs.orderForm) {
+  refs.orderForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    console.log('Order form submitted');
+    refs.orderForm.reset();
+    closeOrderModal();
+  });
+}
 
 // ==================== Init ====================
 async function init() {

@@ -17,25 +17,40 @@ window.setupSlider = (
   if (!list) return;
 
   let dots = [];
-  if (dotsContainer) {
+  const initDots = () => {
+    if (!dotsContainer) return;
     dotsContainer.innerHTML = "";
+    // Calculate how many visible items per view
+    const listRect = list.getBoundingClientRect();
+    const itemRect = list.children[0].getBoundingClientRect();
+    const gap = parseFloat(window.getComputedStyle(list).gap) || 0;
+    const itemsPerView = Math.floor((listRect.width + gap) / (itemRect.width + gap)) || 1;
+    
     const itemsCount = list.children.length;
-    for (let i = 0; i < itemsCount; i++) {
+    // Total dots needed = total items - items per view + 1 (so we don't have unreachable dots at the end)
+    const dotsCount = Math.max(1, itemsCount - itemsPerView + 1);
+
+    for (let i = 0; i < dotsCount; i++) {
       const li = document.createElement("li");
       li.classList.add("dot");
       if (i === 0) li.classList.add("active");
       dotsContainer.appendChild(li);
     }
     dots = dotsContainer.querySelectorAll(".dot");
+  };
+  
+  if (list.children.length > 0) {
+    initDots();
   }
 
   const updateButtons = () => {
     if (!prevBtn && !nextBtn) return;
-    const scrollPos = list.scrollLeft;
-    const maxScroll = list.scrollWidth - list.clientWidth;
+    const scrollPos = Math.ceil(list.scrollLeft);
+    // clientWidth doesn't include padding, use offsetWidth if box-sizing is border-box, or just rely on scrollWidth - clientWidth which is correct standard. However, JS rounding issues can cause it to be off by 1-2px.
+    const maxScroll = Math.floor(list.scrollWidth - list.clientWidth);
 
     if (prevBtn) prevBtn.disabled = scrollPos <= 0;
-    if (nextBtn) nextBtn.disabled = scrollPos >= maxScroll - 1;
+    if (nextBtn) nextBtn.disabled = scrollPos >= maxScroll - 2; // -2px tolerance for fractional pixel rounding
   };
 
   const scrollToItem = (index) => {
@@ -60,7 +75,8 @@ window.setupSlider = (
     const index = Math.round(scrollPos / fullWidth);
 
     dots.forEach((dot, i) => {
-      dot.classList.toggle("active", i === index);
+      // Ensure we don't go out of bounds if index is larger than dots
+      dot.classList.toggle("active", i === Math.min(index, dots.length - 1));
     });
   };
 
@@ -93,6 +109,21 @@ window.setupSlider = (
       updateDots();
       updateButtons();
     });
+  });
+
+  // Handle window resize to recalculate dots
+  window.addEventListener('resize', () => {
+    if (list.children.length > 0) {
+      initDots();
+      updateDots();
+      updateButtons();
+      // Re-attach listeners for new dots
+      dots.forEach((dot, index) => {
+        dot.addEventListener("click", () => {
+          scrollToItem(index);
+        });
+      });
+    }
   });
 
   // Initial call
