@@ -1,6 +1,4 @@
-const LOCAL_URL = 'http://localhost:3000';
-const REMOTE_URL = 'https://my-json-server.typicode.com/vsoroka-hash/MT-markup-practice_P1-Soroka_Volodymyr';
-let BASE_URL = LOCAL_URL;
+const BACKEND_URL = 'https://flora-backend.onrender.com';
 
 // Application state
 const state = {
@@ -49,10 +47,9 @@ function hideLoader() {
 
 async function fetchBestsellers() {
   try {
-    const response = await axios.get(`${BASE_URL}/bestsellers`);
+    const response = await axios.get(`${BACKEND_URL}/api/bouquets/bestsellers`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching bestsellers:', error);
     return [];
   }
 }
@@ -60,20 +57,34 @@ async function fetchBestsellers() {
 async function fetchBouquets(page, limit, query = '') {
   try {
     const params = {
-      _page: page,
-      _limit: limit,
+      page,
+      limit,
     };
     if (query) {
-      params.q = query;
+      params.title = query;
     }
-    const response = await axios.get(`${BASE_URL}/bouquets`, { params });
-    // json-server returns total item count in X-Total-Count header
-    const total = parseInt(response.headers['x-total-count'] ?? response.data.length, 10);
-    return { data: response.data, total };
+    const response = await axios.get(`${BACKEND_URL}/api/bouquets`, { params });
+    const data = response.data;
+    // Backend returns array directly (findAndCountAll rows)
+    return { data, total: data.length < limit ? (page - 1) * limit + data.length : Infinity };
   } catch (error) {
-    console.error('Error fetching bouquets:', error);
     return { data: [], total: 0 };
   }
+}
+
+// ==================== Image helper ====================
+
+function getImageSrc(item) {
+  if (item.photoURL) {
+    // If it's a relative path (uploaded photo), prefix with backend URL
+    if (item.photoURL.startsWith('/')) {
+      return `${BACKEND_URL}${item.photoURL}`;
+    }
+    // If it's a full URL (gravatar or external), use as-is
+    return item.photoURL;
+  }
+  // Fallback placeholder
+  return './images/bouquet-1-1x.jpg';
 }
 
 // ==================== Rendering ====================
@@ -84,24 +95,14 @@ function renderBestsellers(items) {
     .map(
       item => `
       <li class="bestsellers-item">
-        <picture>
-          <source
-            type="image/webp"
-            srcset="
-              ./images/${item.imageBase}-1x.webp 1x,
-              ./images/${item.imageBase}-2x.webp 2x
-            "
-          />
-          <img
-            loading="lazy"
-            src="./images/${item.imageBase}-1x.jpg"
-            srcset="./images/${item.imageBase}-2x.jpg 2x"
-            alt="${item.title}"
-            class="bestsellers-img"
-            width="400"
-            height="320"
-          />
-        </picture>
+        <img
+          loading="lazy"
+          src="${getImageSrc(item)}"
+          alt="${item.title}"
+          class="bestsellers-img"
+          width="400"
+          height="320"
+        />
         <h3 class="bestsellers-item-title">${item.title}</h3>
         <p class="text bestsellers-item-text">${item.description}</p>
         <p class="bestsellers-item-price">$${item.price}</p>
@@ -118,23 +119,13 @@ function renderBouquets(items) {
     .map(
       item => `
       <li class="catalogue-card" style="cursor:pointer;" data-id="${item.id}">
-        <picture>
-          <source
-            type="image/webp"
-            srcset="
-              ./images/${item.imageBase}-1x.webp 1x,
-              ./images/${item.imageBase}-2x.webp 2x
-            "
-          />
-          <img
-            loading="lazy"
-            src="./images/${item.imageBase}-1x.jpg"
-            srcset="./images/${item.imageBase}-2x.jpg 2x"
-            alt="${item.title}"
-            width="250"
-            class="catalogue-img"
-          />
-        </picture>
+        <img
+          loading="lazy"
+          src="${getImageSrc(item)}"
+          alt="${item.title}"
+          width="250"
+          class="catalogue-img"
+        />
         <h3 class="catalogue-item-title">${item.title}</h3>
         <p class="text bestsellers-item-text">${item.description}</p>
         <p class="catalogue-item-price">$${item.price}</p>
@@ -146,7 +137,6 @@ function renderBouquets(items) {
   // Attach product modal open listeners to newly rendered cards
   refs.bouquetsList.querySelectorAll('.catalogue-card:not([data-bound])').forEach(card => {
     card.setAttribute('data-bound', 'true');
-    // Find the corresponding item by matching data-id
     const cardId = parseInt(card.getAttribute('data-id'));
     const item = items.find(i => i.id === cardId);
     if (item) {
@@ -202,7 +192,7 @@ async function loadBouquets() {
   const loadedSoFar = (state.currentPage - 1) * state.limit + bouquets.length;
 
   // Hide button immediately if we have loaded everything
-  if (loadedSoFar >= total || bouquets.length < state.limit) {
+  if (bouquets.length < state.limit) {
     refs.loadMoreBtn.style.display = 'none';
   } else {
     refs.loadMoreBtn.style.display = 'inline-flex';
@@ -239,7 +229,6 @@ if (refs.searchInput) {
 if (refs.modalForm) {
   refs.modalForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    console.log('Modal form submitted');
     refs.modalForm.reset();
     closeModal();
   });
@@ -248,7 +237,6 @@ if (refs.modalForm) {
 if (refs.footerForm) {
   refs.footerForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    console.log('Footer form submitted');
     refs.footerForm.reset();
   });
 }
@@ -295,10 +283,10 @@ function openProductModal(item) {
   refs.productModalPrice.textContent = `$${item.price}`;
   refs.productModalDesc.textContent = item.description;
 
-  const base = `./images/${item.imageBase}`;
-  refs.productModalSource.srcset = `${base}-1x.webp 1x, ${base}-2x.webp 2x`;
-  refs.productModalImg.src = `${base}-1x.jpg`;
-  refs.productModalImg.srcset = `${base}-2x.jpg 2x`;
+  const imgSrc = getImageSrc(item);
+  if (refs.productModalSource) refs.productModalSource.srcset = '';
+  refs.productModalImg.src = imgSrc;
+  refs.productModalImg.srcset = '';
   refs.productModalImg.alt = item.title;
 
   // Reset quantity
@@ -375,7 +363,6 @@ if (refs.orderModal) {
 if (refs.orderForm) {
   refs.orderForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    console.log('Order form submitted');
     refs.orderForm.reset();
     closeOrderModal();
   });
@@ -383,13 +370,6 @@ if (refs.orderForm) {
 
 // ==================== Init ====================
 async function init() {
-  // Try local json-server first; if unavailable, switch to remote mock API
-  try {
-    await axios.get(`${LOCAL_URL}/bestsellers`);
-    BASE_URL = LOCAL_URL;
-  } catch {
-    BASE_URL = REMOTE_URL;
-  }
   await loadInitialData();
 }
 
