@@ -18,3 +18,10 @@ dist/
 coverage/
 *.log
 lighthouse-report.json
+
+# Environment / uploads
+.env
+temp/*
+!temp/.gitkeep
+public/photos/*
+!public/photos/.gitkeep

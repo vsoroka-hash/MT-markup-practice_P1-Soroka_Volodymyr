@@ -1,46 +1,51 @@
-const BACKEND_URL = 'https://flora-backend.onrender.com';
+const BACKEND_URL =
+  window.FLORA_API_URL ||
+  (window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+    ? "http://localhost:3000"
+    : "https://flora-backend-soroka.onrender.com");
 
 // Application state
 const state = {
   currentPage: 1,
   limit: 4,
-  currentQuery: '',
+  currentQuery: "",
 };
 
 const refs = {
-  bestsellersList: document.getElementById('bestsellers-list'),
-  bouquetsList: document.getElementById('bouquets-list'),
-  loadMoreBtn: document.getElementById('load-more-btn'),
-  searchInput: document.getElementById('search-input'),
-  backdrop: document.querySelector('[data-modal]'),
-  openModalBtns: document.querySelectorAll('[data-modal-open]'),
-  closeModalBtn: document.querySelector('[data-modal-close]'),
-  modalForm: document.querySelector('.modal-form'),
-  footerForm: document.querySelector('.footer-subscription-form'),
-  loader: document.getElementById('catalogue-loader'),
+  bestsellersList: document.getElementById("bestsellers-list"),
+  bouquetsList: document.getElementById("bouquets-list"),
+  loadMoreBtn: document.getElementById("load-more-btn"),
+  searchInput: document.getElementById("search-input"),
+  backdrop: document.querySelector("[data-modal]"),
+  openModalBtns: document.querySelectorAll("[data-modal-open]"),
+  closeModalBtn: document.querySelector("[data-modal-close]"),
+  modalForm: document.querySelector(".modal-form"),
+  footerForm: document.querySelector(".footer-subscription-form"),
+  loader: document.getElementById("catalogue-loader"),
   // Product Details modal
-  productModal: document.getElementById('product-modal'),
-  productModalClose: document.getElementById('product-modal-close'),
-  productModalImg: document.getElementById('product-modal-img'),
-  productModalSource: document.getElementById('product-modal-source'),
-  productModalTitle: document.getElementById('product-modal-title'),
-  productModalPrice: document.getElementById('product-modal-price-value'),
-  productModalDesc: document.getElementById('product-modal-description'),
-  productModalBuyBtn: document.querySelector('.product-modal-buy-btn'),
+  productModal: document.getElementById("product-modal"),
+  productModalClose: document.getElementById("product-modal-close"),
+  productModalImg: document.getElementById("product-modal-img"),
+  productModalSource: document.getElementById("product-modal-source"),
+  productModalTitle: document.getElementById("product-modal-title"),
+  productModalPrice: document.getElementById("product-modal-price-value"),
+  productModalDesc: document.getElementById("product-modal-description"),
+  productModalBuyBtn: document.querySelector(".product-modal-buy-btn"),
   // Order Modal
-  orderModal: document.getElementById('order-modal'),
-  orderModalClose: document.getElementById('order-modal-close'),
-  orderForm: document.getElementById('order-form'),
+  orderModal: document.getElementById("order-modal"),
+  orderModalClose: document.getElementById("order-modal-close"),
+  orderForm: document.getElementById("order-form"),
 };
 
 // ==================== Loader ====================
 
 function showLoader() {
-  if (refs.loader) refs.loader.style.display = 'flex';
+  if (refs.loader) refs.loader.style.display = "flex";
 }
 
 function hideLoader() {
-  if (refs.loader) refs.loader.style.display = 'none';
+  if (refs.loader) refs.loader.style.display = "none";
 }
 
 // ==================== API requests ====================
@@ -54,7 +59,7 @@ async function fetchBestsellers() {
   }
 }
 
-async function fetchBouquets(page, limit, query = '') {
+async function fetchBouquets(page, limit, query = "") {
   try {
     const params = {
       page,
@@ -66,7 +71,10 @@ async function fetchBouquets(page, limit, query = '') {
     const response = await axios.get(`${BACKEND_URL}/api/bouquets`, { params });
     const data = response.data;
     // Backend returns array directly (findAndCountAll rows)
-    return { data, total: data.length < limit ? (page - 1) * limit + data.length : Infinity };
+    return {
+      data,
+      total: data.length < limit ? (page - 1) * limit + data.length : Infinity,
+    };
   } catch (error) {
     return { data: [], total: 0 };
   }
@@ -77,14 +85,14 @@ async function fetchBouquets(page, limit, query = '') {
 function getImageSrc(item) {
   if (item.photoURL) {
     // If it's a relative path (uploaded photo), prefix with backend URL
-    if (item.photoURL.startsWith('/')) {
+    if (item.photoURL.startsWith("/")) {
       return `${BACKEND_URL}${item.photoURL}`;
     }
     // If it's a full URL (gravatar or external), use as-is
     return item.photoURL;
   }
   // Fallback placeholder
-  return './images/bouquet-1-1x.jpg';
+  return "./images/bouquet-1-1x.jpg";
 }
 
 // ==================== Rendering ====================
@@ -93,7 +101,7 @@ function renderBestsellers(items) {
   if (!refs.bestsellersList) return;
   const markup = items
     .map(
-      item => `
+      (item) => `
       <li class="bestsellers-item">
         <img
           loading="lazy"
@@ -107,17 +115,17 @@ function renderBestsellers(items) {
         <p class="text bestsellers-item-text">${item.description}</p>
         <p class="bestsellers-item-price">$${item.price}</p>
       </li>
-    `
+    `,
     )
-    .join('');
-  refs.bestsellersList.insertAdjacentHTML('beforeend', markup);
+    .join("");
+  refs.bestsellersList.insertAdjacentHTML("beforeend", markup);
 }
 
 function renderBouquets(items) {
   if (!refs.bouquetsList) return;
   const markup = items
     .map(
-      item => `
+      (item) => `
       <li class="catalogue-card" style="cursor:pointer;" data-id="${item.id}">
         <img
           loading="lazy"
@@ -130,19 +138,21 @@ function renderBouquets(items) {
         <p class="text bestsellers-item-text">${item.description}</p>
         <p class="catalogue-item-price">$${item.price}</p>
       </li>
-    `
+    `,
     )
-    .join('');
-  refs.bouquetsList.insertAdjacentHTML('beforeend', markup);
+    .join("");
+  refs.bouquetsList.insertAdjacentHTML("beforeend", markup);
   // Attach product modal open listeners to newly rendered cards
-  refs.bouquetsList.querySelectorAll('.catalogue-card:not([data-bound])').forEach(card => {
-    card.setAttribute('data-bound', 'true');
-    const cardId = parseInt(card.getAttribute('data-id'));
-    const item = items.find(i => i.id === cardId);
-    if (item) {
-      card.addEventListener('click', () => openProductModal(item));
-    }
-  });
+  refs.bouquetsList
+    .querySelectorAll(".catalogue-card:not([data-bound])")
+    .forEach((card) => {
+      card.setAttribute("data-bound", "true");
+      const cardId = parseInt(card.getAttribute("data-id"));
+      const item = items.find((i) => i.id === cardId);
+      if (item) {
+        card.addEventListener("click", () => openProductModal(item));
+      }
+    });
 }
 
 // ==================== Data loading ====================
@@ -151,24 +161,26 @@ async function loadInitialData() {
   const bestsellers = await fetchBestsellers();
   renderBestsellers(bestsellers);
   // Re-init bestsellers slider after dynamic render (setupSlider is window.setupSlider from slider.js)
-  if (typeof setupSlider === 'function') {
+  if (typeof setupSlider === "function") {
     setupSlider(
-      '.bestsellers-slider-wrapper',
-      '.bestsellers-list',
-      '.bestsellers-prev-btn',
-      '.bestsellers-next-btn',
-      '.pagination-dots',
+      ".bestsellers-slider-wrapper",
+      ".bestsellers-list",
+      ".bestsellers-prev-btn",
+      ".bestsellers-next-btn",
+      ".pagination-dots",
     );
   }
   // Attach product detail modal on bestseller cards
   if (refs.bestsellersList) {
-    refs.bestsellersList.querySelectorAll('.bestsellers-item').forEach((card, index) => {
-      card.style.cursor = 'pointer';
-      const item = bestsellers[index];
-      if (item) {
-        card.addEventListener('click', () => openProductModal(item));
-      }
-    });
+    refs.bestsellersList
+      .querySelectorAll(".bestsellers-item")
+      .forEach((card, index) => {
+        card.style.cursor = "pointer";
+        const item = bestsellers[index];
+        if (item) {
+          card.addEventListener("click", () => openProductModal(item));
+        }
+      });
   }
 
   await loadBouquets();
@@ -176,13 +188,18 @@ async function loadInitialData() {
 
 async function loadBouquets() {
   showLoader();
-  const { data: bouquets, total } = await fetchBouquets(state.currentPage, state.limit, state.currentQuery);
+  const { data: bouquets, total } = await fetchBouquets(
+    state.currentPage,
+    state.limit,
+    state.currentQuery,
+  );
   hideLoader();
 
   // Handle empty state on first page — no results at all
   if (state.currentPage === 1 && bouquets.length === 0) {
-    refs.bouquetsList.innerHTML = '<p class="text" style="text-align: center;">No bouquets found.</p>';
-    refs.loadMoreBtn.style.display = 'none';
+    refs.bouquetsList.innerHTML =
+      '<p class="text" style="text-align: center;">No bouquets found.</p>';
+    refs.loadMoreBtn.style.display = "none";
     return;
   }
 
@@ -193,9 +210,9 @@ async function loadBouquets() {
 
   // Hide button immediately if we have loaded everything
   if (bouquets.length < state.limit) {
-    refs.loadMoreBtn.style.display = 'none';
+    refs.loadMoreBtn.style.display = "none";
   } else {
-    refs.loadMoreBtn.style.display = 'inline-flex';
+    refs.loadMoreBtn.style.display = "inline-flex";
   }
 }
 
@@ -203,7 +220,7 @@ async function loadBouquets() {
 
 // Pagination — Load More
 if (refs.loadMoreBtn) {
-  refs.loadMoreBtn.addEventListener('click', async () => {
+  refs.loadMoreBtn.addEventListener("click", async () => {
     state.currentPage += 1;
     await loadBouquets();
   });
@@ -212,13 +229,13 @@ if (refs.loadMoreBtn) {
 // Filtering — Search input (debounced)
 let searchDebounceTimer = null;
 if (refs.searchInput) {
-  refs.searchInput.addEventListener('input', (e) => {
+  refs.searchInput.addEventListener("input", (e) => {
     clearTimeout(searchDebounceTimer);
     searchDebounceTimer = setTimeout(async () => {
       state.currentQuery = e.target.value.trim();
       state.currentPage = 1;
-      refs.bouquetsList.innerHTML = '';
-      refs.loadMoreBtn.style.display = 'none';
+      refs.bouquetsList.innerHTML = "";
+      refs.loadMoreBtn.style.display = "none";
       await loadBouquets();
     }, 300);
   });
@@ -227,7 +244,7 @@ if (refs.searchInput) {
 // ==================== Forms ====================
 
 if (refs.modalForm) {
-  refs.modalForm.addEventListener('submit', (e) => {
+  refs.modalForm.addEventListener("submit", (e) => {
     e.preventDefault();
     refs.modalForm.reset();
     closeModal();
@@ -235,7 +252,7 @@ if (refs.modalForm) {
 }
 
 if (refs.footerForm) {
-  refs.footerForm.addEventListener('submit', (e) => {
+  refs.footerForm.addEventListener("submit", (e) => {
     e.preventDefault();
     refs.footerForm.reset();
   });
@@ -244,18 +261,18 @@ if (refs.footerForm) {
 // ==================== Contact Form Modal logic ====================
 
 function openModal() {
-  refs.backdrop.classList.add('is-open');
-  document.body.classList.add('no-scroll');
+  refs.backdrop.classList.add("is-open");
+  document.body.classList.add("no-scroll");
 }
 
 function closeModal() {
-  refs.backdrop.classList.remove('is-open');
-  document.body.classList.remove('no-scroll');
+  refs.backdrop.classList.remove("is-open");
+  document.body.classList.remove("no-scroll");
 }
 
 // Open contact modal buttons (header/mobile menu)
-refs.openModalBtns.forEach(btn => {
-  btn.addEventListener('click', (e) => {
+refs.openModalBtns.forEach((btn) => {
+  btn.addEventListener("click", (e) => {
     e.preventDefault();
     openModal();
   });
@@ -263,12 +280,12 @@ refs.openModalBtns.forEach(btn => {
 
 // Close by X button
 if (refs.closeModalBtn) {
-  refs.closeModalBtn.addEventListener('click', closeModal);
+  refs.closeModalBtn.addEventListener("click", closeModal);
 }
 
 // Close by backdrop click
 if (refs.backdrop) {
-  refs.backdrop.addEventListener('click', (e) => {
+  refs.backdrop.addEventListener("click", (e) => {
     if (e.target === refs.backdrop) {
       closeModal();
     }
@@ -284,33 +301,33 @@ function openProductModal(item) {
   refs.productModalDesc.textContent = item.description;
 
   const imgSrc = getImageSrc(item);
-  if (refs.productModalSource) refs.productModalSource.srcset = '';
+  if (refs.productModalSource) refs.productModalSource.srcset = "";
   refs.productModalImg.src = imgSrc;
-  refs.productModalImg.srcset = '';
+  refs.productModalImg.srcset = "";
   refs.productModalImg.alt = item.title;
 
   // Reset quantity
-  const qtyInput = document.getElementById('product-qty');
+  const qtyInput = document.getElementById("product-qty");
   if (qtyInput) qtyInput.value = 1;
 
-  refs.productModal.classList.add('is-open');
-  document.body.classList.add('no-scroll');
+  refs.productModal.classList.add("is-open");
+  document.body.classList.add("no-scroll");
   refs.productModalClose.focus();
 }
 
 function closeProductModal() {
-  refs.productModal.classList.remove('is-open');
-  document.body.classList.remove('no-scroll');
+  refs.productModal.classList.remove("is-open");
+  document.body.classList.remove("no-scroll");
 }
 
 // Close product modal by X button
 if (refs.productModalClose) {
-  refs.productModalClose.addEventListener('click', closeProductModal);
+  refs.productModalClose.addEventListener("click", closeProductModal);
 }
 
 // Close product modal by backdrop click
 if (refs.productModal) {
-  refs.productModal.addEventListener('click', (e) => {
+  refs.productModal.addEventListener("click", (e) => {
     if (e.target === refs.productModal) {
       closeProductModal();
     }
@@ -318,30 +335,35 @@ if (refs.productModal) {
 }
 
 // Close by Escape key (either modal)
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    if (refs.backdrop.classList.contains('is-open')) closeModal();
-    if (refs.productModal && refs.productModal.classList.contains('is-open')) closeProductModal();
-    if (refs.orderModal && refs.orderModal.classList.contains('is-open')) closeOrderModal();
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    if (refs.backdrop.classList.contains("is-open")) closeModal();
+    if (refs.productModal && refs.productModal.classList.contains("is-open"))
+      closeProductModal();
+    if (refs.orderModal && refs.orderModal.classList.contains("is-open"))
+      closeOrderModal();
   }
 });
 
 // ==================== Order Modal logic ====================
 
 function openOrderModal() {
-  refs.orderModal.classList.add('is-open');
-  document.body.classList.add('no-scroll');
+  refs.orderModal.classList.add("is-open");
+  document.body.classList.add("no-scroll");
 }
 
 function closeOrderModal() {
-  refs.orderModal.classList.remove('is-open');
-  if (!refs.productModal.classList.contains('is-open') && !refs.backdrop.classList.contains('is-open')) {
-    document.body.classList.remove('no-scroll');
+  refs.orderModal.classList.remove("is-open");
+  if (
+    !refs.productModal.classList.contains("is-open") &&
+    !refs.backdrop.classList.contains("is-open")
+  ) {
+    document.body.classList.remove("no-scroll");
   }
 }
 
 if (refs.productModalBuyBtn) {
-  refs.productModalBuyBtn.addEventListener('click', (e) => {
+  refs.productModalBuyBtn.addEventListener("click", (e) => {
     e.preventDefault();
     closeProductModal();
     openOrderModal();
@@ -349,11 +371,11 @@ if (refs.productModalBuyBtn) {
 }
 
 if (refs.orderModalClose) {
-  refs.orderModalClose.addEventListener('click', closeOrderModal);
+  refs.orderModalClose.addEventListener("click", closeOrderModal);
 }
 
 if (refs.orderModal) {
-  refs.orderModal.addEventListener('click', (e) => {
+  refs.orderModal.addEventListener("click", (e) => {
     if (e.target === refs.orderModal) {
       closeOrderModal();
     }
@@ -361,7 +383,7 @@ if (refs.orderModal) {
 }
 
 if (refs.orderForm) {
-  refs.orderForm.addEventListener('submit', (e) => {
+  refs.orderForm.addEventListener("submit", (e) => {
     e.preventDefault();
     refs.orderForm.reset();
     closeOrderModal();
@@ -373,4 +395,4 @@ async function init() {
   await loadInitialData();
 }
 
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener("DOMContentLoaded", init);
