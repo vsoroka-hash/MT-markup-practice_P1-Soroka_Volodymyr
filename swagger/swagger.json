@@ -282,7 +282,7 @@
           "photoURL": {
             "type": "string",
             "format": "uri",
-            "example": "/photos/6cbb6237-63ac-4c3e-aa58-25f781fa99ab.jpg"
+            "example": "https://flora-backend-soroka.onrender.com/photos/6cbb6237-63ac-4c3e-aa58-25f781fa99ab.jpg"
           },
           "createdAt": {
             "type": "string",

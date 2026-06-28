@@ -24,8 +24,9 @@ window.setupSlider = (
     const listRect = list.getBoundingClientRect();
     const itemRect = list.children[0].getBoundingClientRect();
     const gap = parseFloat(window.getComputedStyle(list).gap) || 0;
-    const itemsPerView = Math.floor((listRect.width + gap) / (itemRect.width + gap)) || 1;
-    
+    const itemsPerView =
+      Math.floor((listRect.width + gap) / (itemRect.width + gap)) || 1;
+
     const itemsCount = list.children.length;
     // Total dots needed = total items - items per view + 1 (so we don't have unreachable dots at the end)
     const dotsCount = Math.max(1, itemsCount - itemsPerView + 1);
@@ -38,7 +39,7 @@ window.setupSlider = (
     }
     dots = dotsContainer.querySelectorAll(".dot");
   };
-  
+
   if (list.children.length > 0) {
     initDots();
   }
@@ -112,7 +113,7 @@ window.setupSlider = (
   });
 
   // Handle window resize to recalculate dots
-  window.addEventListener('resize', () => {
+  window.addEventListener("resize", () => {
     if (list.children.length > 0) {
       initDots();
       updateDots();
@@ -132,12 +133,11 @@ window.setupSlider = (
 
 // Feedback slider initialised immediately (static HTML)
 setupSlider(
-  '.feedback-slider-wrapper',
-  '.feedbacks-list',
-  '.feedback-prev-btn',
-  '.feedback-next-btn',
-  '.pagination-dots',
+  ".feedback-slider-wrapper",
+  ".feedbacks-list",
+  ".feedback-prev-btn",
+  ".feedback-next-btn",
+  ".pagination-dots",
 );
 
 // NOTE: Bestsellers slider is initialised in api.js after data is loaded
-

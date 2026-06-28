@@ -77,7 +77,9 @@ async function updatePhoto(req, res) {
 
   await fs.rename(req.file.path, destination);
 
-  const photoURL = `/photos/${filename}`;
+  const publicBackendUrl = process.env.PUBLIC_BACKEND_URL;
+  const origin = publicBackendUrl || `${req.protocol}://${req.get("host")}`;
+  const photoURL = `${origin}/photos/${filename}`;
   const updatedBouquet = await bouquet.update({ photoURL });
 
   res.status(200).json(updatedBouquet);

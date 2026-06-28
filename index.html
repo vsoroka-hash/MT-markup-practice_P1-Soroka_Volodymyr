@@ -178,16 +178,35 @@
             Explore our stunning selection of fresh flower bouquets.
           </p>
           <div class="catalogue-filter">
-            <label for="search-input" class="visually-hidden">Search bouquets</label>
-            <input type="text" id="search-input" class="search-input" name="search" placeholder="Search bouquets...">
+            <label for="search-input" class="visually-hidden"
+              >Search bouquets</label
+            >
+            <input
+              type="text"
+              id="search-input"
+              class="search-input"
+              name="search"
+              placeholder="Search bouquets..."
+            />
           </div>
           <ul class="catalogue-list bouquets" id="bouquets-list">
             <!-- dynamically rendered -->
           </ul>
-          <div id="catalogue-loader" class="catalogue-loader" style="display:none;">
+          <div
+            id="catalogue-loader"
+            class="catalogue-loader"
+            style="display: none"
+          >
             <span class="loader-spinner"></span>
           </div>
-          <button type="button" class="primary-button" id="load-more-btn" style="display:none;">Show More</button>
+          <button
+            type="button"
+            class="primary-button"
+            id="load-more-btn"
+            style="display: none"
+          >
+            Show More
+          </button>
         </div>
       </section>
 
@@ -218,19 +237,22 @@
               </li>
               <li class="feedbacks-item">
                 <p class="text">
-                  Ordered a last-minute gift and was amazed by how fast and professional the delivery was. Highly recommend!
+                  Ordered a last-minute gift and was amazed by how fast and
+                  professional the delivery was. Highly recommend!
                 </p>
                 <p class="feedback-person">Julia K.</p>
               </li>
               <li class="feedbacks-item">
                 <p class="text">
-                  Every flower was perfect. You can feel the care and love in every bouquet.
+                  Every flower was perfect. You can feel the care and love in
+                  every bouquet.
                 </p>
                 <p class="feedback-person">Mark S.</p>
               </li>
               <li class="feedbacks-item">
                 <p class="text">
-                  Flora helped make my friend's birthday extra special. She was blown away by the flowers!
+                  Flora helped make my friend's birthday extra special. She was
+                  blown away by the flowers!
                 </p>
                 <p class="feedback-person">Natalie V.</p>
               </li>
@@ -375,8 +397,17 @@
           <p class="footer-subscription-title">Subscribe to our newsletter</p>
           <div class="footer-form-wrapper">
             <label for="subscribe-email" class="visually-hidden">E-mail</label>
-            <input type="email" name="subscribe-email" id="subscribe-email" class="footer-form-input" placeholder="E-mail" required />
-            <button type="submit" class="primary-button footer-submit-button">Subscribe</button>
+            <input
+              type="email"
+              name="subscribe-email"
+              id="subscribe-email"
+              class="footer-form-input"
+              placeholder="E-mail"
+              required
+            />
+            <button type="submit" class="primary-button footer-submit-button">
+              Subscribe
+            </button>
           </div>
         </form>
         <hr class="footer-divider" />
@@ -410,11 +441,15 @@
       </div>
     </div>
 
-
     <!-- Contact Form Modal -->
     <div class="backdrop" data-modal>
       <div class="modal">
-        <button type="button" class="modal-close-btn" data-modal-close aria-label="Close modal">
+        <button
+          type="button"
+          class="modal-close-btn"
+          data-modal-close
+          aria-label="Close modal"
+        >
           <svg class="modal-close-icon" width="24" height="24">
             <use href="./images/icons.svg#close_x"></use>
           </svg>
@@ -424,45 +459,92 @@
           <div class="modal-field">
             <label for="user-name" class="modal-label">Name</label>
             <div class="input-wrapper">
-              <input type="text" id="user-name" name="user-name" class="modal-input" required />
+              <input
+                type="text"
+                id="user-name"
+                name="user-name"
+                class="modal-input"
+                required
+              />
             </div>
           </div>
           <div class="modal-field">
             <label for="user-phone" class="modal-label">Phone</label>
             <div class="input-wrapper">
-              <input type="tel" id="user-phone" name="user-phone" class="modal-input" required />
+              <input
+                type="tel"
+                id="user-phone"
+                name="user-phone"
+                class="modal-input"
+                required
+              />
             </div>
           </div>
           <div class="modal-field">
             <label for="user-email" class="modal-label">Email</label>
             <div class="input-wrapper">
-              <input type="email" id="user-email" name="user-email" class="modal-input" required />
+              <input
+                type="email"
+                id="user-email"
+                name="user-email"
+                class="modal-input"
+                required
+              />
             </div>
           </div>
           <div class="modal-field">
             <label for="user-comment" class="modal-label">Comment</label>
-            <textarea id="user-comment" name="user-comment" class="modal-textarea" placeholder="Text input"></textarea>
+            <textarea
+              id="user-comment"
+              name="user-comment"
+              class="modal-textarea"
+              placeholder="Text input"
+            ></textarea>
           </div>
           <div class="modal-checkbox-wrapper">
-            <input type="checkbox" id="user-privacy" name="user-privacy" class="modal-checkbox visually-hidden" required value="true" />
+            <input
+              type="checkbox"
+              id="user-privacy"
+              name="user-privacy"
+              class="modal-checkbox visually-hidden"
+              required
+              value="true"
+            />
             <label for="user-privacy" class="modal-checkbox-label">
               <span class="custom-checkbox">
                 <svg class="custom-checkbox-icon" width="10" height="8">
                   <use href="./images/icons.svg#check"></use>
                 </svg>
               </span>
-              I accept the terms and conditions of the&nbsp;<a href="#" class="privacy-link">Privacy Policy</a>
+              I accept the terms and conditions of the&nbsp;<a
+                href="#"
+                class="privacy-link"
+                >Privacy Policy</a
+              >
             </label>
           </div>
-          <button type="submit" class="primary-button modal-submit-btn">Send</button>
+          <button type="submit" class="primary-button modal-submit-btn">
+            Send
+          </button>
         </form>
       </div>
     </div>
 
     <!-- Product Details Modal -->
-    <div class="backdrop product-backdrop" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="product-modal-title">
+    <div
+      class="backdrop product-backdrop"
+      id="product-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="product-modal-title"
+    >
       <div class="product-modal">
-        <button type="button" class="product-modal-close-btn" id="product-modal-close" aria-label="Close product details">
+        <button
+          type="button"
+          class="product-modal-close-btn"
+          id="product-modal-close"
+          aria-label="Close product details"
+        >
           <svg class="modal-close-icon" width="24" height="24">
             <use href="./images/icons.svg#close_x"></use>
           </svg>
@@ -471,18 +553,44 @@
           <div class="product-modal-img-wrap">
             <picture id="product-modal-picture">
               <source id="product-modal-source" type="image/webp" srcset="" />
-              <img id="product-modal-img" src="" alt="" class="product-modal-img" width="536" height="571" />
+              <img
+                id="product-modal-img"
+                src=""
+                alt=""
+                class="product-modal-img"
+                width="536"
+                height="571"
+              />
             </picture>
           </div>
           <div class="product-modal-info">
             <h2 class="product-modal-title" id="product-modal-title"></h2>
-            <p class="product-modal-price"><span id="product-modal-price-value"></span></p>
-            <p class="product-modal-description" id="product-modal-description"></p>
+            <p class="product-modal-price">
+              <span id="product-modal-price-value"></span>
+            </p>
+            <p
+              class="product-modal-description"
+              id="product-modal-description"
+            ></p>
             <div class="product-modal-actions">
-              <button type="button" class="primary-button product-modal-buy-btn">Buy now</button>
+              <button
+                type="button"
+                class="primary-button product-modal-buy-btn"
+              >
+                Buy now
+              </button>
               <div class="product-modal-qty">
-                <label for="product-qty" class="visually-hidden">Quantity</label>
-                <input type="number" id="product-qty" class="product-modal-qty-input" value="1" min="1" max="99" />
+                <label for="product-qty" class="visually-hidden"
+                  >Quantity</label
+                >
+                <input
+                  type="number"
+                  id="product-qty"
+                  class="product-modal-qty-input"
+                  value="1"
+                  min="1"
+                  max="99"
+                />
               </div>
             </div>
           </div>
@@ -491,38 +599,81 @@
     </div>
 
     <!-- Order Modal -->
-    <div class="backdrop order-backdrop" id="order-modal" role="dialog" aria-modal="true" aria-labelledby="order-modal-title">
+    <div
+      class="backdrop order-backdrop"
+      id="order-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="order-modal-title"
+    >
       <div class="modal order-modal">
-        <button type="button" class="modal-close-btn" id="order-modal-close" aria-label="Close order modal">
+        <button
+          type="button"
+          class="modal-close-btn"
+          id="order-modal-close"
+          aria-label="Close order modal"
+        >
           <svg class="modal-close-icon" width="24" height="24">
             <use href="./images/icons.svg#close_x"></use>
           </svg>
         </button>
-        <p class="modal-title order-modal-title" id="order-modal-title">Order</p>
+        <p class="modal-title order-modal-title" id="order-modal-title">
+          Order
+        </p>
         <form class="modal-form" id="order-form">
           <div class="modal-field">
             <label for="order-name" class="modal-label">Name*</label>
             <div class="input-wrapper">
-              <input type="text" id="order-name" name="order-name" class="modal-input" placeholder="Ann" required />
+              <input
+                type="text"
+                id="order-name"
+                name="order-name"
+                class="modal-input"
+                placeholder="Ann"
+                required
+              />
             </div>
           </div>
           <div class="modal-field">
             <label for="order-phone" class="modal-label">Phone*</label>
             <div class="input-wrapper">
-              <input type="tel" id="order-phone" name="order-phone" class="modal-input" placeholder="+1 (555) 123-4567" required />
+              <input
+                type="tel"
+                id="order-phone"
+                name="order-phone"
+                class="modal-input"
+                placeholder="+1 (555) 123-4567"
+                required
+              />
             </div>
           </div>
           <div class="modal-field">
             <label for="order-address" class="modal-label">Address</label>
             <div class="input-wrapper">
-              <input type="text" id="order-address" name="order-address" class="modal-input" placeholder="456 Floral Ave, Sydney NSW 2000 AU" />
+              <input
+                type="text"
+                id="order-address"
+                name="order-address"
+                class="modal-input"
+                placeholder="456 Floral Ave, Sydney NSW 2000 AU"
+              />
             </div>
           </div>
           <div class="modal-field">
             <label for="order-comment" class="modal-label">Message</label>
-            <textarea id="order-comment" name="order-comment" class="modal-textarea order-modal-textarea" placeholder="Type your message..."></textarea>
+            <textarea
+              id="order-comment"
+              name="order-comment"
+              class="modal-textarea order-modal-textarea"
+              placeholder="Type your message..."
+            ></textarea>
           </div>
-          <button type="submit" class="primary-button modal-submit-btn order-modal-submit-btn">Go to Checkout</button>
+          <button
+            type="submit"
+            class="primary-button modal-submit-btn order-modal-submit-btn"
+          >
+            Go to Checkout
+          </button>
         </form>
       </div>
     </div>
@@ -532,6 +683,5 @@
     <script src="./js/menu.js"></script>
     <script src="./js/scroll-top.js"></script>
     <script src="./js/api.js"></script>
-
   </body>
 </html>
