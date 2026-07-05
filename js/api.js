@@ -10,6 +10,7 @@ const state = {
   currentPage: 1,
   limit: 4,
   currentQuery: "",
+  selectedBouquet: null,
 };
 
 const refs = {
@@ -23,6 +24,7 @@ const refs = {
   modalForm: document.querySelector(".modal-form"),
   footerForm: document.querySelector(".footer-subscription-form"),
   loader: document.getElementById("catalogue-loader"),
+  reviewsList: document.querySelector(".feedbacks-list"),
   // Product Details modal
   productModal: document.getElementById("product-modal"),
   productModalClose: document.getElementById("product-modal-close"),
@@ -70,14 +72,37 @@ async function fetchBouquets(page, limit, query = "") {
     }
     const response = await axios.get(`${BACKEND_URL}/api/bouquets`, { params });
     const data = response.data;
-    // Backend returns array directly (findAndCountAll rows)
+
+    if (Array.isArray(data)) {
+      return {
+        data,
+        total: data.length,
+        hasMore: false,
+      };
+    }
+
     return {
-      data,
-      total: data.length < limit ? (page - 1) * limit + data.length : Infinity,
+      data: data.data || [],
+      total: data.total || 0,
+      hasMore: Boolean(data.hasMore),
     };
   } catch (error) {
-    return { data: [], total: 0 };
+    return { data: [], total: 0, hasMore: false };
   }
+}
+
+async function fetchReviews() {
+  try {
+    const response = await axios.get(`${BACKEND_URL}/api/reviews`);
+    return response.data;
+  } catch (error) {
+    return [];
+  }
+}
+
+async function createOrder(order) {
+  const response = await axios.post(`${BACKEND_URL}/api/orders`, order);
+  return response.data;
 }
 
 // ==================== Image helper ====================
@@ -155,9 +180,29 @@ function renderBouquets(items) {
     });
 }
 
+function renderReviews(items) {
+  if (!refs.reviewsList || items.length === 0) return;
+
+  const markup = items
+    .map(
+      (item) => `
+      <li class="feedbacks-item">
+        <p class="text">${item.text}</p>
+        <p class="feedback-person">${item.author}</p>
+      </li>
+    `,
+    )
+    .join("");
+
+  refs.reviewsList.innerHTML = markup;
+}
+
 // ==================== Data loading ====================
 
 async function loadInitialData() {
+  const reviews = await fetchReviews();
+  renderReviews(reviews);
+
   const bestsellers = await fetchBestsellers();
   renderBestsellers(bestsellers);
   // Re-init bestsellers slider after dynamic render (setupSlider is window.setupSlider from slider.js)
@@ -188,12 +233,16 @@ async function loadInitialData() {
 
 async function loadBouquets() {
   showLoader();
-  const { data: bouquets, total } = await fetchBouquets(
+  if (refs.loadMoreBtn) refs.loadMoreBtn.disabled = true;
+
+  const { data: bouquets, hasMore } = await fetchBouquets(
     state.currentPage,
     state.limit,
     state.currentQuery,
   );
+
   hideLoader();
+  if (refs.loadMoreBtn) refs.loadMoreBtn.disabled = false;
 
   // Handle empty state on first page — no results at all
   if (state.currentPage === 1 && bouquets.length === 0) {
@@ -203,13 +252,11 @@ async function loadBouquets() {
     return;
   }
 
-  renderBouquets(bouquets);
+  if (bouquets.length > 0) {
+    renderBouquets(bouquets);
+  }
 
-  // How many items have been loaded in total so far
-  const loadedSoFar = (state.currentPage - 1) * state.limit + bouquets.length;
-
-  // Hide button immediately if we have loaded everything
-  if (bouquets.length < state.limit) {
+  if (!hasMore || bouquets.length === 0) {
     refs.loadMoreBtn.style.display = "none";
   } else {
     refs.loadMoreBtn.style.display = "inline-flex";
@@ -295,6 +342,8 @@ if (refs.backdrop) {
 // ==================== Product Details Modal logic ====================
 
 function openProductModal(item) {
+  state.selectedBouquet = item;
+
   // Populate content
   refs.productModalTitle.textContent = item.title;
   refs.productModalPrice.textContent = `$${item.price}`;
@@ -383,10 +432,35 @@ if (refs.orderModal) {
 }
 
 if (refs.orderForm) {
-  refs.orderForm.addEventListener("submit", (e) => {
+  refs.orderForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    refs.orderForm.reset();
-    closeOrderModal();
+
+    if (!state.selectedBouquet) return;
+
+    const submitBtn = refs.orderForm.querySelector("[type='submit']");
+    const formData = new FormData(refs.orderForm);
+    const qtyInput = document.getElementById("product-qty");
+    const quantity = Number(qtyInput?.value) || 1;
+
+    const order = {
+      bouquetId: state.selectedBouquet.id,
+      quantity,
+      customerName: formData.get("order-name"),
+      phone: formData.get("order-phone"),
+      address: formData.get("order-address") || "",
+      comment: formData.get("order-comment") || "",
+    };
+
+    try {
+      if (submitBtn) submitBtn.disabled = true;
+      await createOrder(order);
+      refs.orderForm.reset();
+      closeOrderModal();
+    } catch (error) {
+      alert("Unable to create order. Please try again.");
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+    }
   });
 }
 

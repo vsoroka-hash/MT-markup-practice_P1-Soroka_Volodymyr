@@ -100,5 +100,37 @@
       "description": "A delicate bouquet of pink carnations and roses wrapped in satin paper \u2014 soft, stylish, and versatile.",
       "imageBase": "bouquet-8"
     }
+  ],
+  "reviews": [
+    {
+      "id": 1,
+      "author": "Emma T.",
+      "text": "Flora made my anniversary unforgettable with their beautiful arrangement!"
+    },
+    {
+      "id": 2,
+      "author": "Daniel R.",
+      "text": "Absolutely stunning bouquet! It looked even better than the photo and arrived right on time."
+    },
+    {
+      "id": 3,
+      "author": "Olivia M.",
+      "text": "The service was exceptional, and the flowers were fresh!"
+    },
+    {
+      "id": 4,
+      "author": "Julia K.",
+      "text": "Ordered a last-minute gift and was amazed by how fast and professional the delivery was. Highly recommend!"
+    },
+    {
+      "id": 5,
+      "author": "Mark S.",
+      "text": "Every flower was perfect. You can feel the care and love in every bouquet."
+    },
+    {
+      "id": 6,
+      "author": "Natalie V.",
+      "text": "Flora helped make my friend's birthday extra special. She was blown away by the flowers!"
+    }
   ]
 }

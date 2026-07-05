@@ -28,12 +28,24 @@ async function getAllBouquets({ page, limit, title } = {}) {
     order: [["id", "ASC"]],
   };
 
-  if (page && limit) {
-    options.limit = Number(limit);
-    options.offset = (Number(page) - 1) * Number(limit);
+  const normalizedPage = Math.max(Number(page) || 1, 1);
+  const normalizedLimit = Math.max(Number(limit) || 0, 0);
+
+  if (normalizedLimit > 0) {
+    options.limit = normalizedLimit;
+    options.offset = (normalizedPage - 1) * normalizedLimit;
   }
 
-  return Bouquet.findAll(options);
+  const { count, rows } = await Bouquet.findAndCountAll(options);
+  const loaded = options.offset ? options.offset + rows.length : rows.length;
+
+  return {
+    data: rows,
+    total: count,
+    page: normalizedPage,
+    limit: normalizedLimit || count,
+    hasMore: loaded < count,
+  };
 }
 
 async function getBestsellers(limit = 6) {
