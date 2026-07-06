@@ -16,6 +16,7 @@ pnpm-debug.log*
 # Build / reports
 dist/
 coverage/
+test-results/
 *.log
 lighthouse-report.json
 

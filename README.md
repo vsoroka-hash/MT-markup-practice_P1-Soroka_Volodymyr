@@ -27,14 +27,28 @@ Swagger UI is available at `http://localhost:3000/api-docs`.
 
 ## API
 
-- `GET /api/bouquets`
+- `GET /api/bouquets?page=1&limit=4`
 - `GET /api/bouquets/:id`
+- `GET /api/bouquets/bestsellers`
 - `POST /api/bouquets`
 - `PUT /api/bouquets/:id`
 - `DELETE /api/bouquets/:id`
 - `PATCH /api/bouquets/:id/favorite`
 - `PATCH /api/bouquets/:id/photo`
-- `GET /api/bouquets/bestsellers`
+- `GET /api/reviews`
+- `POST /api/orders`
+
+The paginated bouquet endpoint returns:
+
+```json
+{
+  "data": [],
+  "total": 0,
+  "page": 1,
+  "limit": 4,
+  "hasMore": false
+}
+```
 
 The backend uses Sequelize with PostgreSQL, Joi validation, Multer uploads to
 `public/photos`, and Swagger documentation.
